@@ -11,5 +11,9 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     NButton: typeof import('naive-ui')['NButton']
+    NForm: typeof import('naive-ui')['NForm']
+    NFormItem: typeof import('naive-ui')['NFormItem']
+    NResult: typeof import('naive-ui')['NResult']
+    NSelect: typeof import('naive-ui')['NSelect']
   }
 }
