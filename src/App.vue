@@ -1,13 +1,27 @@
 <script setup lang="ts">
-function initialData() {
+import { calculateProbability } from "./helpers";
+import { trainingData } from "./training";
+
+interface InitialData {
+  type?: string;
+  subType?: string;
+  price?: string;
+  excess?: string;
+  lack?: string;
+}
+
+function initialData(): InitialData {
   return {
     type: undefined,
     subType: undefined,
+    price: undefined,
+    excess: undefined,
+    lack: undefined,
   };
 }
 
 const formData = ref(initialData());
-
+const result = ref<"Yes" | "No">("Yes");
 const isHasResult = ref(false);
 
 const sources = [
@@ -104,6 +118,15 @@ const lackSelect = lackes.map((item) => ({ label: item, value: item }));
 
 function calculateData() {
   isHasResult.value = true;
+  result.value = calculateProbability(
+    trainingData,
+    formData.value.type as string,
+    formData.value.subType as string,
+    formData.value.price as string,
+    formData.value.excess as string,
+    formData.value.lack as string
+  );
+
 }
 
 function resetForm() {
@@ -125,23 +148,28 @@ function resetForm() {
         <main>
           <n-form v-if="!isHasResult">
             <n-form-item label="Jenis">
-              <n-select v-model:value="formData.type" :options="types" />
+              <n-select
+                v-model:value="formData.type"
+                :options="types"
+                filterable
+              />
             </n-form-item>
             <n-form-item label="Jenis Kategori">
               <n-select
                 v-model:value="formData.subType"
                 :disabled="!formData.type"
                 :options="subTypes"
+                filterable
               />
             </n-form-item>
             <n-form-item label="Harga">
-              <n-select :options="priceSelect"></n-select>
+              <n-select v-model:value="formData.price" :options="priceSelect" filterable></n-select>
             </n-form-item>
             <n-form-item label="Kelebihan">
-              <n-select :options="excessSelect"></n-select>
+              <n-select v-model:value="formData.excess" :options="excessSelect" filterable></n-select>
             </n-form-item>
             <n-form-item label="Kekurangan">
-              <n-select :options="lackSelect"></n-select>
+              <n-select v-model:value="formData.lack" :options="lackSelect" filterable></n-select>
             </n-form-item>
             <div class="max-w-sm mx-auto">
               <n-button block type="primary" @click="calculateData">
@@ -151,14 +179,14 @@ function resetForm() {
           </n-form>
           <div v-else>
             <div>
-              <n-result status="success" title="Yes">
+              <n-result v-if="result=='Yes'" status="success" title="Yes">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Voluptatem neque voluptates totam quo recusandae architecto
                 accusamus officia necessitatibus obcaecati accusantium deleniti
                 ad ipsum, fugit consequatur, aut possimus ducimus provident
                 porro!
               </n-result>
-              <n-result v-show="false" status="error" title="No">
+              <n-result v-else status="error" title="No">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Voluptatem neque voluptates totam quo recusandae architecto
                 accusamus officia necessitatibus obcaecati accusantium deleniti
