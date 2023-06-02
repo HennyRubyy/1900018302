@@ -2,8 +2,8 @@ import type { DataEntry } from "../types";
 
 function getAllTotal(data: any) {
   return {
-    Yes: data.filter((item) => item.result == "Yes").length,
-    No: data.filter((item) => item.result == "No").length,
+    Yes: data.filter((item:any) => item.result == "Yes").length,
+    No: data.filter((item:any) => item.result == "No").length,
   };
 }
 
