@@ -13,7 +13,16 @@ declare module '@vue/runtime-core' {
     NButton: typeof import('naive-ui')['NButton']
     NForm: typeof import('naive-ui')['NForm']
     NFormItem: typeof import('naive-ui')['NFormItem']
+    NH1: typeof import('naive-ui')['NH1']
+    NH2: typeof import('naive-ui')['NH2']
+    NModal: typeof import('naive-ui')['NModal']
     NResult: typeof import('naive-ui')['NResult']
     NSelect: typeof import('naive-ui')['NSelect']
+    NTab: typeof import('naive-ui')['NTab']
+    NTable: typeof import('naive-ui')['NTable']
+    NTbody: typeof import('naive-ui')['NTbody']
+    NTr: typeof import('naive-ui')['NTr']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
   }
 }

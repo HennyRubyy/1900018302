@@ -1,9 +1,14 @@
 import { createApp } from 'vue'
 import './assets/css/main.css'
 import App from './App.vue'
+import {router} from './router'
 
 const meta = document.createElement('meta')
 meta.name = 'naive-ui-style'
 document.head.appendChild(meta)
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(router)
+
+app.mount('#app')
