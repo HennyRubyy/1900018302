@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { calculateProbability } from "../helpers";
-import { trainingData } from "../training";
 import {
   classificationSelect,
   conditionSelect,
@@ -10,6 +9,7 @@ import {
   sources,
   initialData
 } from "../source";
+import { useTraining } from "../composable/training";
 
 
 const formData = ref(initialData());
@@ -19,6 +19,13 @@ const totalResult = ref();
 const classProbabilities = ref();
 const isHasResult = ref(false);
 
+const { getAll, trainings} = useTraining();
+
+onMounted(() => {
+  getAll()
+})
+
+
 function calculateData() {
   const {
     expected: e,
@@ -26,7 +33,7 @@ function calculateData() {
     totalResult: t,
     classProbabilities: c,
   } = calculateProbability(
-    trainingData,
+    trainings.value,
     formData.value.type as string,
     formData.value.subType as string,
     formData.value.price as string,
