@@ -83,7 +83,7 @@ function onEdit({
   formData.value.condition = condition;
   formData.value.result = result;
 
-  showModalEdit.value = true
+  showModalEdit.value = true;
 }
 
 function onSubmitEdit() {
@@ -97,14 +97,16 @@ function onSubmitEdit() {
     formData.value.result as string
   );
 
-  showModalEdit.value = false
+  showModalEdit.value = false;
 }
 </script>
 
 <template>
   <div>
-    <div class="flex justify-between">
-      <n-h1> Daftar data training </n-h1>
+    <n-h1> Daftar data training </n-h1>
+
+    <div class="flex justify-between mb-5">
+      <n-button @click="$router.push('/')">Kembali</n-button>
       <n-button @click="showModal = true"> Tambah </n-button>
     </div>
     <n-table>
@@ -118,7 +120,13 @@ function onSubmitEdit() {
         <th>Hasil</th>
         <th>Aksi</th>
       </tr>
-      <tr v-for="(item, index) in trainings">
+      <tr v-if="trainings.length == 0">
+        <td colspan="8">
+          <n-empty></n-empty>
+        </td>
+      </tr>
+      <template v-else>
+        <tr v-for="(item, index) in trainings">
         <td>
           {{ index + 1 }}
         </td>
@@ -154,6 +162,7 @@ function onSubmitEdit() {
           </n-button>
         </td>
       </tr>
+      </template>
     </n-table>
   </div>
   <n-modal v-model:show="showModal" preset="card">
