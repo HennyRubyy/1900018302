@@ -35,10 +35,10 @@ export function calculateProbability(
   // Calculate probabilities of input features given each class
   const featureProbabilities = {
     category: calculateFeatureProbability(data, "category", category),
-    subCategory: calculateFeatureProbability(data, "subCategory", subCategory),
+    subCategory: calculateFeatureProbability(data, "sub_category", subCategory),
     price: calculateFeatureProbability(data, "price", price),
-    classifications: calculateFeatureProbability(data, "classifications", classifications),
-    conditions: calculateFeatureProbability(data, "conditions", conditions),
+    classifications: calculateFeatureProbability(data, "classification", classifications),
+    conditions: calculateFeatureProbability(data, "condition", conditions),
   };
 
   const d = {
