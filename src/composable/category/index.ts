@@ -1,5 +1,6 @@
+import { useMessage } from "naive-ui";
 import { supabase } from "../../lib/supabase";
-import { useQuery, useMutation } from "@tanstack/vue-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 
 type CreateCategory = {
   name: string;
@@ -29,11 +30,21 @@ class CategoryRepository {
   }
 
   async delete(id: number) {
-    await supabase.from(tableName).delete().eq("id", id);
+    return await supabase.from(tableName).delete().eq("id", id);
+  }
+
+  async detail(id: number) {
+    return await supabase.from(tableName).select("*").eq("id", id).single();
   }
 }
 
 export function useCategory() {
+  const queryClient = useQueryClient();
+  const route = useRoute();
+  const router = useRouter();
+
+  const message = useMessage();
+
   const repository = new CategoryRepository();
 
   const { data: categories, isLoading: loadingData } = useQuery(
@@ -41,22 +52,52 @@ export function useCategory() {
     () => repository.all()
   );
 
+  const { data: category, isLoading: loadingDetail } = useQuery(
+    ["category", route.params.id],
+    () => repository.detail(+route.params.id),
+    {
+      enabled: computed(() => !!route.params.id),
+    }
+  );
+
   const { mutate, isLoading: creatingData } = useMutation(
-    (payload: CreateCategory) => repository.create(payload)
+    (payload: CreateCategory) => repository.create(payload),
+    {
+      onSuccess: () => {
+        router.go(-1);
+        message.success("Berhasil menambahkan data");
+      },
+    }
   );
 
   const { mutate: updateData, isLoading: updatingData } = useMutation(
-    (payload: Partial<CreateCategory>) => repository.update(payload)
+    (payload: Partial<CreateCategory>) => repository.update(payload),
+    {
+      onSuccess: () => {
+        router.go(-1);
+        message.success("Berhasil update data");
+      },
+    }
   );
 
   const { mutate: deleteData, isLoading: deletingData } = useMutation(
-    (payload: number) => repository.delete(payload)
+    (payload: number) => repository.delete(payload),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries(["category"]);
+        message.success("Berhasil menghapus data");
+      },
+    }
   );
 
   return {
     all: {
       isLoading: loadingData,
       data: categories,
+    },
+    detail: {
+      isLoading: loadingDetail,
+      data: category,
     },
     create: {
       mutate,

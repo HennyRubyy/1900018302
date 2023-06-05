@@ -1,6 +1,5 @@
 <template>
   <n-space vertical>
-    <n-switch v-model:value="collapsed" />
     <n-layout has-sider>
       <n-layout-sider
         bordered
@@ -12,6 +11,12 @@
         @collapse="collapsed = true"
         @expand="collapsed = false"
       >
+      <div class="flex justify-center h-24 items-center flex-col text-center p-3">
+        <span class="text-xl font-bold">SPK</span>
+        <span class="text-xs">
+          Nilai ekonomis kehartabendaan milik pemerintah desa dengan metode naive bayes classifier
+        </span>
+      </div>
         <n-menu
           :collapsed="collapsed"
           :collapsed-width="64"
@@ -20,9 +25,10 @@
           :render-label="renderMenuLabel"
           :render-icon="renderMenuIcon"
           :expand-icon="expandIcon"
+          @select="onSelect"
         />
       </n-layout-sider>
-      <n-layout>
+      <n-layout class="p-5">
         <slot />
       </n-layout>
     </n-layout>
@@ -30,105 +36,66 @@
 </template>
 
 <script lang="ts">
-import { h, ref, defineComponent } from 'vue'
-import { NIcon } from 'naive-ui'
-import type { MenuOption } from 'naive-ui'
-import { BookmarkOutline, CaretDownOutline } from '@vicons/ionicons5'
+import { h, ref, defineComponent } from "vue";
+import { NIcon } from "naive-ui";
+import type { MenuOption } from "naive-ui";
+import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
 
 const menuOptions: MenuOption[] = [
   {
-    label: 'Hear the Wind Sing',
-    key: 'hear-the-wind-sing',
-    href: 'https://en.wikipedia.org/wiki/Hear_the_Wind_Sing'
+    label: "Hitung",
+    key: "/form",
   },
   {
-    label: 'Pinball 1973',
-    key: 'pinball-1973',
-    disabled: true,
+    label: "Data Training",
+    key: "training",
+  },
+  {
+    label: "Data Master",
+    key: "master",
     children: [
       {
-        label: 'Rat',
-        key: 'rat'
-      }
-    ]
+        label: "Category",
+        key: "/dashboard/master/category",
+      },
+      {
+        label: "Sub Category",
+        key: "sub-category",
+      },
+    ],
   },
-  {
-    label: 'A Wild Sheep Chase',
-    key: 'a-wild-sheep-chase',
-    disabled: true
-  },
-  {
-    label: 'Dance Dance Dance',
-    key: 'Dance Dance Dance',
-    children: [
-      {
-        type: 'group',
-        label: 'People',
-        key: 'people',
-        children: [
-          {
-            label: 'Narrator',
-            key: 'narrator'
-          },
-          {
-            label: 'Sheep Man',
-            key: 'sheep-man'
-          }
-        ]
-      },
-      {
-        label: 'Beverage',
-        key: 'beverage',
-        children: [
-          {
-            label: 'Whisky',
-            key: 'whisky',
-            href: 'https://en.wikipedia.org/wiki/Whisky'
-          }
-        ]
-      },
-      {
-        label: 'Food',
-        key: 'food',
-        children: [
-          {
-            label: 'Sandwich',
-            key: 'sandwich'
-          }
-        ]
-      },
-      {
-        label: 'The past increases. The future recedes.',
-        key: 'the-past-increases-the-future-recedes'
-      }
-    ]
-  }
-]
+];
 
 export default defineComponent({
-  setup () {
+  setup() {
+
+    const router = useRouter()
+
     return {
+      onSelect(key: string) {
+        router.push(key)
+      },
       menuOptions,
-      collapsed: ref(true),
-      renderMenuLabel (option: MenuOption) {
-        if ('href' in option) {
-          return h('a', { href: option.href, target: '_blank' }, [
-            option.label as string
-          ])
+      collapsed: ref(false),
+      renderMenuLabel(option: MenuOption) {
+        if ("href" in option) {
+          return h("a", { href: option.href, target: "_blank" }, [
+            option.label as string,
+          ]);
         }
-        return option.label as string
+        return option.label as string;
       },
-      renderMenuIcon (option: MenuOption) {
+      renderMenuIcon(option: MenuOption) {
         // return render placeholder for indent
-        if (option.key === 'sheep-man') return true
+        if (option.key === "sheep-man") return true;
         // return falsy, don't render icon placeholder
-        if (option.key === 'food') return null
-        return h(NIcon, null, { default: () => h(BookmarkOutline) })
+        if (option.key === "food") return null;
+        return h(NIcon, null, { default: () => h(BookmarkOutline) });
       },
-      expandIcon () {
-        return h(NIcon, null, { default: () => h(CaretDownOutline) })
-      }
-    }
-  }
-})
+      expandIcon() {
+        return h(NIcon, null, { default: () => h(CaretDownOutline) });
+      },
+    };
+  },
+});
 </script>

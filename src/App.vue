@@ -1,5 +1,12 @@
+<script setup lang="ts">
+import Layout from "~/layouts/dashboard.vue";
+
+</script>
+
 <template>
-  <div class="p-5">
-    <router-view></router-view>
-  </div>
+  <layout>
+    <n-message-provider>
+      <router-view></router-view>
+    </n-message-provider>
+  </layout>
 </template>
