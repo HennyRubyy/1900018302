@@ -14,6 +14,7 @@
         <div
           class="flex justify-center h-24 items-center flex-col text-center p-3"
         >
+        <img src="~/assets/images/logo.webp" />
         </div>
         <n-menu
           v-model:value="activeMenu"
