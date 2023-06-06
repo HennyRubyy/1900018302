@@ -45,7 +45,7 @@ function onSubmit() {
     <n-h2> Update Jenis </n-h2>
     <n-form @submit.prevent="onSubmit">
       <n-form-item label="Category">
-        <n-select v-model:value="formData.category" :options="categorySelect" />
+        <n-select v-model:value="formData.category" :options="categorySelect" filterable />
       </n-form-item>
       <n-form-item label="Nama">
         <n-input v-model:value="formData.name"></n-input>

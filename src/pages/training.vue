@@ -3,10 +3,7 @@ import {
   classificationSelect,
   conditionSelect,
   priceSelect,
-  types,
   initialData,
-  sources,
-  priorityOrder,
 } from "../source";
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
@@ -17,12 +14,12 @@ const showModalEdit = ref(false);
 const showModalDelete = ref(false);
 const selectedId = ref();
 
-const { all: {
-  data: categories
-} } = useCategory();
-const { all: {
-  data: subCategories
-} } = useSubCategory();
+const {
+  all: { data: categories },
+} = useCategory();
+const {
+  all: { data: subCategories },
+} = useSubCategory();
 
 const { getAll, trainings, createOne, deleteOne, updateOne } = useTraining();
 
@@ -37,19 +34,6 @@ watch(showModal, (v) => {
 });
 
 const formData = ref<any>({ result: undefined, ...initialData() });
-
-const subTypes = computed(() => {
-  const source = sources.find((source) => source.type === formData.value.type);
-  return source?.subCategory
-    .sort((a, b) => {
-      return (
-        priorityOrder[a.priority.toLocaleLowerCase()] -
-        priorityOrder[b.priority.toLocaleLowerCase()]
-      );
-    })
-    .reverse()
-    .map((item) => ({ label: item.name, value: item.name }));
-});
 
 const resultSelect = [
   {
@@ -110,12 +94,17 @@ function onSubmitEdit() {
 }
 
 const categorySelect = computed(() => {
-  return categories.value?.data?.map((item) => ({label: item.name, value: item.name}))
-})
+  return categories.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.name,
+  }));
+});
 
 const subCategorySelect = computed(() => {
-  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.id}))
-})
+  return subCategories.value?.data
+    ?.filter((value) => value.category.name === formData.value.type)
+    ?.map((item) => ({ label: item.name, value: item.id }));
+});
 </script>
 
 <template>
@@ -144,41 +133,43 @@ const subCategorySelect = computed(() => {
       </tr>
       <template v-else>
         <tr v-for="(item, index) in trainings">
-        <td>
-          {{ index + 1 }}
-        </td>
-        <td>
-          {{ item.category }}
-        </td>
-        <td>
-          {{ item.sub_category }}
-        </td>
-        <td>
-          {{ item.price }}
-        </td>
-        <td>
-          {{ item.classification }}
-        </td>
-        <td>
-          {{ item.condition }}
-        </td>
-        <td>
-          {{ item.result }}
-        </td>
-        <td class="space-x-2">
-          <n-button text type="primary" @click="onEdit(item)"> Edit </n-button>
-          <n-button
-            text
-            type="error"
-            @click="
-              selectedId = item.id;
-              showModalDelete = true;
-            "
-          >
-            Hapus
-          </n-button>
-        </td>
-      </tr>
+          <td>
+            {{ index + 1 }}
+          </td>
+          <td>
+            {{ item.category }}
+          </td>
+          <td>
+            {{ item.sub_category }}
+          </td>
+          <td>
+            {{ item.price }}
+          </td>
+          <td>
+            {{ item.classification }}
+          </td>
+          <td>
+            {{ item.condition }}
+          </td>
+          <td>
+            {{ item.result }}
+          </td>
+          <td class="space-x-2">
+            <n-button text type="primary" @click="onEdit(item)">
+              Edit
+            </n-button>
+            <n-button
+              text
+              type="error"
+              @click="
+                selectedId = item.id;
+                showModalDelete = true;
+              "
+            >
+              Hapus
+            </n-button>
+          </td>
+        </tr>
       </template>
     </n-table>
   </div>
@@ -186,7 +177,11 @@ const subCategorySelect = computed(() => {
     <n-h2> Tambah Data </n-h2>
     <n-form>
       <n-form-item label="Jenis">
-        <n-select v-model:value="formData.type" :options="categorySelect" filterable />
+        <n-select
+          v-model:value="formData.type"
+          :options="categorySelect"
+          filterable
+        />
       </n-form-item>
       <n-form-item label="Jenis Kategori">
         <n-select
@@ -229,17 +224,21 @@ const subCategorySelect = computed(() => {
       </div>
     </n-form>
   </n-modal>
-  <n-modal v-model:show="showModalEdit" preset="card">
+  <n-modal v-model:show="showModalEdit" style="max-width: 80vw" preset="card">
     <n-h2> Edit Data </n-h2>
     <n-form>
       <n-form-item label="Jenis">
-        <n-select v-model:value="formData.type" :options="types" filterable />
+        <n-select
+          v-model:value="formData.type"
+          :options="categorySelect"
+          filterable
+        />
       </n-form-item>
       <n-form-item label="Jenis Kategori">
         <n-select
           v-model:value="formData.subType"
           :disabled="!formData.type"
-          :options="subTypes"
+          :options="subCategorySelect"
           filterable
         />
       </n-form-item>
