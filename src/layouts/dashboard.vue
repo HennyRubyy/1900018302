@@ -14,11 +14,6 @@
         <div
           class="flex justify-center h-24 items-center flex-col text-center p-3"
         >
-          <span class="text-xl font-bold">SPK</span>
-          <span class="text-xs">
-            Nilai ekonomis kehartabendaan milik pemerintah desa dengan metode
-            naive bayes classifier
-          </span>
         </div>
         <n-menu
           v-model:value="activeMenu"

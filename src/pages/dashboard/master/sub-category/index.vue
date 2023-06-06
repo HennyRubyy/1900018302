@@ -18,6 +18,7 @@ function onDelete(id: number) {
         <thead>
           <tr>
             <th>Nama</th>
+            <th>Kategori</th>
             <th>Aksi</th>
           </tr>
         </thead>
@@ -31,6 +32,9 @@ function onDelete(id: number) {
             <tr v-for="item in data?.data">
               <td>
                 {{ item.name }}
+              </td>
+              <td>
+                {{ item?.category?.name }}
               </td>
               <td class="space-x-3">
                 <n-button
