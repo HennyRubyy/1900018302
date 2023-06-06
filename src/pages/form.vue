@@ -4,12 +4,11 @@ import {
   classificationSelect,
   conditionSelect,
   priceSelect,
-  types,
-  priorityOrder,
-  sources,
   initialData,
 } from "../source";
 import { useTraining } from "../composable/training";
+import { useCategory } from "../composable/category";
+import { useSubCategory } from "../composable/sub-category";
 
 const formData = ref(initialData());
 const expected = ref<"Yes" | "No">("Yes");
@@ -19,6 +18,12 @@ const classProbabilities = ref();
 const isHasResult = ref(false);
 
 const { getAll, trainings } = useTraining();
+const { all: {
+  data: categories
+} } = useCategory();
+const { all: {
+  data: subCategories
+} } = useSubCategory();
 
 onMounted(() => {
   getAll();
@@ -46,18 +51,16 @@ function calculateData() {
   classProbabilities.value = c;
 }
 
-const subTypes = computed(() => {
-  const source = sources.find((source) => source.type === formData.value.type);
-  return source?.subCategory
-    .sort((a, b) => {
-      return (
-        priorityOrder[a.priority.toLocaleLowerCase()] -
-        priorityOrder[b.priority.toLocaleLowerCase()]
-      );
-    })
-    .reverse()
-    .map((item) => ({ label: item.name, value: item.name }));
-});
+
+
+const categorySelect = computed(() => {
+  return categories.value?.data?.map((item) => ({label: item.name, value: item.name}))
+})
+
+const subCategorySelect = computed(() => {
+  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.id}))
+})
+
 
 function resetForm() {
   formData.value = initialData();
@@ -80,7 +83,7 @@ function resetForm() {
             <n-form-item label="Jenis">
               <n-select
                 v-model:value="formData.type"
-                :options="types"
+                :options="categorySelect"
                 filterable
               />
             </n-form-item>
@@ -88,7 +91,7 @@ function resetForm() {
               <n-select
                 v-model:value="formData.subType"
                 :disabled="!formData.type"
-                :options="subTypes"
+                :options="subCategorySelect"
                 filterable
               />
             </n-form-item>

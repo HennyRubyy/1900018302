@@ -1,14 +1,17 @@
-import { createApp } from 'vue'
-import './assets/css/main.css'
-import App from './App.vue'
-import {router} from './router'
+import { createApp } from "vue";
+import "./assets/css/main.css";
+import App from "./App.vue";
+import { router } from "./router";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 
-const meta = document.createElement('meta')
-meta.name = 'naive-ui-style'
-document.head.appendChild(meta)
+const meta = document.createElement("meta");
+meta.name = "naive-ui-style";
 
-const app = createApp(App)
 
-app.use(router)
+document.head.appendChild(meta);
 
-app.mount('#app')
+const app = createApp(App);
+
+app.use(router);
+app.use(VueQueryPlugin)
+app.mount("#app");

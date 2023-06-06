@@ -9,11 +9,20 @@ import {
   priorityOrder,
 } from "../source";
 import { useTraining } from "../composable/training";
+import { useCategory } from "../composable/category";
+import { useSubCategory } from "../composable/sub-category";
 
 const showModal = ref(false);
 const showModalEdit = ref(false);
 const showModalDelete = ref(false);
 const selectedId = ref();
+
+const { all: {
+  data: categories
+} } = useCategory();
+const { all: {
+  data: subCategories
+} } = useSubCategory();
 
 const { getAll, trainings, createOne, deleteOne, updateOne } = useTraining();
 
@@ -99,6 +108,14 @@ function onSubmitEdit() {
 
   showModalEdit.value = false;
 }
+
+const categorySelect = computed(() => {
+  return categories.value?.data?.map((item) => ({label: item.name, value: item.name}))
+})
+
+const subCategorySelect = computed(() => {
+  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.id}))
+})
 </script>
 
 <template>
@@ -165,17 +182,17 @@ function onSubmitEdit() {
       </template>
     </n-table>
   </div>
-  <n-modal v-model:show="showModal" preset="card">
+  <n-modal style="max-width: 80vw" v-model:show="showModal" preset="card">
     <n-h2> Tambah Data </n-h2>
     <n-form>
       <n-form-item label="Jenis">
-        <n-select v-model:value="formData.type" :options="types" filterable />
+        <n-select v-model:value="formData.type" :options="categorySelect" filterable />
       </n-form-item>
       <n-form-item label="Jenis Kategori">
         <n-select
           v-model:value="formData.subType"
           :disabled="!formData.type"
-          :options="subTypes"
+          :options="subCategorySelect"
           filterable
         />
       </n-form-item>
