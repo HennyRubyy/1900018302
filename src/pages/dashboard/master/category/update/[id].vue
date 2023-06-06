@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Layout from "~/layouts/dashboard.vue";
-
 import { useCategory } from "~/composable/category";
 
 const route = useRoute()
@@ -18,18 +16,18 @@ const {
 watch(
   data,
   (value) => {
-    formData.value.name = value.data.name;
+    formData.value.name = value?.data?.name;
   },
   { deep: true }
 );
 
 function onSubmit() {
-  mutate(formData.value);
+  mutate(formData.value as any);
 }
 </script>
 
 <template>
-
+  <n-spin :show="loadingDetail">
     <n-button @click="$router.push('category')"> Kembali </n-button>
     <n-h2>
       Update Jenis
@@ -40,4 +38,5 @@ function onSubmit() {
       </n-form-item>
       <n-button :loading="isLoading" type="primary" attr-type="submit">Submit</n-button>
     </n-form>
+  </n-spin>
 </template>

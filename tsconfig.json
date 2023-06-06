@@ -1,11 +1,8 @@
 {
   "compilerOptions": { 
-    "composite": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
-      "@features/*": ["./src/features/*"],
-      "@components/*": ["./src/components/*"]
     },
   
 
