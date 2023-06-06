@@ -23,7 +23,7 @@ class CategoryRepository {
     await supabase
       .from(tableName)
       .update(payload)
-      .eq("id", id);
+      .eq("id", payload.id);
   }
 
   async delete(id: number) {
