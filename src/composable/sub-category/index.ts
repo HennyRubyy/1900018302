@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 
 type CreateCategory = {
   name: string;
+  category: any;
   id?: number;
 };
 
@@ -18,12 +19,10 @@ class CategoryRepository {
     await supabase.from(tableName).insert(payload);
   }
 
-  async update({ id, name }: Partial<CreateCategory>) {
+  async update(payload: Partial<CreateCategory>) {
     await supabase
       .from(tableName)
-      .update({
-        name,
-      })
+      .update(payload)
       .eq("id", id);
   }
 
