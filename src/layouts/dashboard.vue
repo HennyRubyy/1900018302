@@ -12,9 +12,9 @@
         @expand="collapsed = false"
       >
         <div
-          class="flex justify-center h-24 items-center flex-col text-center p-3"
+          class="flex justify-center h-15 items-center flex-col text-center p-3"
         >
-          <img class="h-16" :src="Logo" />
+          <img class="h-25" :src="Logo" />
         </div>
         <n-menu
           v-model:value="activeMenu"
