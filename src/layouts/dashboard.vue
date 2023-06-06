@@ -25,7 +25,7 @@
           :render-label="renderMenuLabel"
           :render-icon="renderMenuIcon"
           :expand-icon="expandIcon"
-          @select="onSelect"
+          @update:value="onSelect"
         />
       </n-layout-sider>
       <n-layout class="p-5">
@@ -48,7 +48,7 @@ const menuOptions: MenuOption[] = [
   },
   {
     label: "Data Training",
-    key: "training",
+    key: "/training",
   },
   {
     label: "Data Master",
@@ -60,7 +60,7 @@ const menuOptions: MenuOption[] = [
       },
       {
         label: "Sub Category",
-        key: "sub-category",
+        key: "/dashboard/master/sub-category",
       },
     ],
   },

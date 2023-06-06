@@ -56,7 +56,7 @@ export function useCategory() {
     ["category", route.params.id],
     () => repository.detail(+route.params.id),
     {
-      enabled: computed(() => !!route.params.id),
+      enabled: computed(() => !!route.params.id && route.name === 'dashboard-master-category-update-id'),
     }
   );
 

@@ -1,27 +1,26 @@
+import { useMessage } from "naive-ui";
 import { supabase } from "../../lib/supabase";
-import { useQuery, useMutation } from "@tanstack/vue-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 
-type CreateSubCategory = {
+type CreateCategory = {
   name: string;
   id?: number;
 };
 
-class SubCategoryRepository {
-  private tableName = "sub_categories";
+export const tableName = "sub_categories";
 
+class CategoryRepository {
   async all() {
-    return supabase.from(this.tableName).select("*");
+    return supabase.from(tableName).select("*, category(*)");
   }
 
-  async create({ name }: { name: string }) {
-    await supabase.from(this.tableName).insert({
-      name,
-    });
+  async create(payload: { name: string }) {
+    await supabase.from(tableName).insert(payload);
   }
 
-  async update({ id, name }: Partial<CreateSubCategory>) {
+  async update({ id, name }: Partial<CreateCategory>) {
     await supabase
-      .from(this.tableName)
+      .from(tableName)
       .update({
         name,
       })
@@ -29,34 +28,74 @@ class SubCategoryRepository {
   }
 
   async delete(id: number) {
-    await supabase.from(this.tableName).delete().eq("id", id);
+    return await supabase.from(tableName).delete().eq("id", id);
+  }
+
+  async detail(id: number) {
+    return await supabase.from(tableName).select("*").eq("id", id).single();
   }
 }
 
 export function useSubCategory() {
-  const repository = new SubCategoryRepository();
+  const queryClient = useQueryClient();
+  const route = useRoute();
+  const router = useRouter();
 
-  const { data: categories, isLoading: loadingData } = useQuery(
-    ["SubCategory"],
-    repository.all
+  const message = useMessage();
+
+  const repository = new CategoryRepository();
+
+  const { data: sub_categories, isLoading: loadingData } = useQuery(
+    ["sub-category"],
+    () => repository.all()
+  );
+
+  const { data: category, isLoading: loadingDetail } = useQuery(
+    ["sub-category", route.params.id],
+    () => repository.detail(+route.params.id),
+    {
+      enabled: computed(() => !!route.params.id),
+    }
   );
 
   const { mutate, isLoading: creatingData } = useMutation(
-    (payload: CreateSubCategory) => repository.create(payload)
+    (payload: CreateCategory) => repository.create(payload),
+    {
+      onSuccess: () => {
+        router.go(-1);
+        message.success("Berhasil menambahkan data");
+      },
+    }
   );
 
   const { mutate: updateData, isLoading: updatingData } = useMutation(
-    (payload: Partial<CreateSubCategory>) => repository.update(payload)
+    (payload: Partial<CreateCategory>) => repository.update(payload),
+    {
+      onSuccess: () => {
+        router.go(-1);
+        message.success("Berhasil update data");
+      },
+    }
   );
 
   const { mutate: deleteData, isLoading: deletingData } = useMutation(
-    (payload: number) => repository.delete(payload)
+    (payload: number) => repository.delete(payload),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries(["sub-category"]);
+        message.success("Berhasil menghapus data");
+      },
+    }
   );
 
   return {
     all: {
       isLoading: loadingData,
-      data: categories,
+      data: sub_categories,
+    },
+    detail: {
+      isLoading: loadingDetail,
+      data: category,
     },
     create: {
       mutate,
