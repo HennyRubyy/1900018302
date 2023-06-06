@@ -14,7 +14,7 @@
         <div
           class="flex justify-center h-24 items-center flex-col text-center p-3"
         >
-        <img src="~/assets/images/logo.webp" />
+        <img :src="Logo" />
         </div>
         <n-menu
           v-model:value="activeMenu"
@@ -40,6 +40,7 @@ import { h, ref, defineComponent } from "vue";
 import { NIcon } from "naive-ui";
 import type { MenuOption } from "naive-ui";
 import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
+import Logo from '~/assets/images/logo.webp'
 
 const menuOptions: MenuOption[] = [
   {
@@ -78,6 +79,7 @@ export default defineComponent({
       },
       menuOptions,
       activeMenu,
+      Logo,
       collapsed: ref(false),
       renderMenuLabel(option: MenuOption) {
         if ("href" in option) {
