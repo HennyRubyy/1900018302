@@ -11,13 +11,17 @@
         @collapse="collapsed = true"
         @expand="collapsed = false"
       >
-      <div class="flex justify-center h-24 items-center flex-col text-center p-3">
-        <span class="text-xl font-bold">SPK</span>
-        <span class="text-xs">
-          Nilai ekonomis kehartabendaan milik pemerintah desa dengan metode naive bayes classifier
-        </span>
-      </div>
+        <div
+          class="flex justify-center h-24 items-center flex-col text-center p-3"
+        >
+          <span class="text-xl font-bold">SPK</span>
+          <span class="text-xs">
+            Nilai ekonomis kehartabendaan milik pemerintah desa dengan metode
+            naive bayes classifier
+          </span>
+        </div>
         <n-menu
+          v-model:value="activeMenu"
           :collapsed="collapsed"
           :collapsed-width="64"
           :collapsed-icon-size="22"
@@ -44,7 +48,7 @@ import { BookmarkOutline, CaretDownOutline } from "@vicons/ionicons5";
 const menuOptions: MenuOption[] = [
   {
     label: "Hitung",
-    key: "/form",
+    key: "/",
   },
   {
     label: "Data Training",
@@ -68,14 +72,16 @@ const menuOptions: MenuOption[] = [
 
 export default defineComponent({
   setup() {
+    const router = useRouter();
 
-    const router = useRouter()
+    const activeMenu = ref('/')
 
     return {
       onSelect(key: string) {
-        router.push(key)
+        router.push(key);
       },
       menuOptions,
+      activeMenu,
       collapsed: ref(false),
       renderMenuLabel(option: MenuOption) {
         if ("href" in option) {
