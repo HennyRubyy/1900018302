@@ -58,7 +58,7 @@ const categorySelect = computed(() => {
 })
 
 const subCategorySelect = computed(() => {
-  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.id}))
+  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.name}))
 })
 
 
