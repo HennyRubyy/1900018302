@@ -1,27 +1,28 @@
 import type { DataEntry } from "../types";
 
+//get total data yes dan no global
 function getAllTotal(data: any) {
   return {
     Yes: data.filter((item:any) => item.result === "Yes").length,
     No: data.filter((item:any) => item.result === "No").length,
   };
 }
-
+//menghitung probabilitas setiap properti
 export function calculateProbability(
-  data: DataEntry[],
+  data: DataEntry[],//parameter untuk data training
   category: string,
   subCategory: string,
   price: string,
   classifications: string,
   conditions: string
 ): any {
-  // Calculate probabilities of each class ("Yes" and "No")
+  // Hitung probabilitas masing-masing kelas ("Ya" dan "Tidak")
   const classProbabilities = {
     Yes: 0,
     No: 0,
   };
 
-  // Count occurrences of each class
+  // Hitung kemunculan setiap kelas
   data.forEach((entry) => {
     if (entry.result === "Yes") {
       classProbabilities.Yes++;
@@ -30,8 +31,8 @@ export function calculateProbability(
     }
   });
 
-  // Calculate probabilities of input features given each class
-  const featureProbabilities = {
+  // Hitung probabilitas fitur input yang diberikan setiap kelas dari user
+  const featureProbabilities = { 
     category: calculateFeatureProbability(data, "category", category),
     subCategory: calculateFeatureProbability(data, "sub_category", subCategory),
     price: calculateFeatureProbability(data, "price", price),
@@ -39,7 +40,8 @@ export function calculateProbability(
     conditions: calculateFeatureProbability(data, "condition", conditions),
   };
 
-  const d = {
+  // hitung per sub kategori
+  const d = { 
     category: {
       Yes: featureProbabilities.category.Yes / getAllTotal(data).Yes,
       No: featureProbabilities.category.No / getAllTotal(data).No,
@@ -62,7 +64,7 @@ export function calculateProbability(
     },
   };
 
-  const result = {
+  const result = { // get hasil hitung sub kategori
     category: {
       yes: +d.category.Yes.toFixed(2),
       no: +d.category.No.toFixed(2),
@@ -85,6 +87,7 @@ export function calculateProbability(
     },
   };
 
+  //mengalikan hasil dari semua data Yes dan No untuk mendapatkan keputusan akhir
   const expected = Object.values(result).reduce((a, b) => {
     return {
       yes: a.yes * b.yes,
@@ -92,7 +95,7 @@ export function calculateProbability(
     };
   });
 
-  // Return "Yes" if the probability is greater than or equal to 0.5, otherwise return "No"
+  // Kembalikan "Ya" jika probabilitasnya lebih besar dari atau sama dengan 0,5, jika tidak, kembalikan "Tidak"
   return {
     expected: expected.yes > expected.no ? "Yes" : "No",
     result,
@@ -101,6 +104,7 @@ export function calculateProbability(
   };
 }
 
+//get funtion hitung Yes atau NO
 function calculateFeatureProbability(
   data: DataEntry[],
   feature: keyof DataEntry,
@@ -111,7 +115,7 @@ function calculateFeatureProbability(
     No: 0,
   };
 
-  // Count occurrences of the feature value for each class
+  // Hitung kemunculan nilai fitur untuk setiap kelas
   data.forEach((entry) => {
     if (entry[feature] === value && entry.result === "Yes") {
       featureProbabilities.Yes++;
