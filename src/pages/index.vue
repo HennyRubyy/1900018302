@@ -9,6 +9,65 @@ import {
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
+import { Chart, registerables, type ChartData, ChartOptions } from "chart.js";
+import {
+  DoughnutChart,
+  useDoughnutChart,
+  BarChart,
+  useBarChart,
+} from "vue-chart-3";
+
+Chart.register(...registerables);
+
+const dataValues = ref([30, 40, 60, 70, 5]);
+const chartDataProps = ref([
+  { yes: 0.37, no: 0.34 },
+  { yes: 0.06, no: 0.05 },
+  { yes: 0.06, no: 0.02 },
+  { yes: 0.2, no: 0.52 },
+  { yes: 0.29, no: 0.5 },
+]);
+const dataLabels = ref(["Yes", "No"]);
+
+const testData = computed<ChartData<"doughnut">>(() => ({
+  labels: dataLabels.value,
+  datasets: [
+    {
+      data: dataValues.value,
+      backgroundColor: ["#77CEFF", "#0079AF", "#123E6B", "#97B0C4", "#A5C8ED"],
+    },
+  ],
+}));
+
+const options = computed<ChartOptions<"doughnut">>(() => ({}));
+
+const { doughnutChartProps } = useDoughnutChart({
+  chartData: testData,
+  options,
+});
+
+const { barChartProps } = useBarChart({
+  chartData: {
+    labels: [
+      "Category",
+      "Sub Category",
+      "Price",
+      "Classification",
+      "Condition",
+    ],
+    datasets: [
+      {
+        data: computed(() => chartDataProps.value.map((item) => item.yes))
+          .value,
+        label: "Yes",
+      },
+      {
+        data: computed(() => chartDataProps.value.map((item) => item.no)).value,
+        label: "No",
+      },
+    ],
+  },
+});
 
 const formData = ref(initialData());
 const expected = ref<"Yes" | "No">("Yes");
@@ -18,12 +77,12 @@ const classProbabilities = ref();
 const isHasResult = ref(false);
 
 const { getAll, trainings } = useTraining();
-const { all: {
-  data: categories
-} } = useCategory();
-const { all: {
-  data: subCategories
-} } = useSubCategory();
+const {
+  all: { data: categories },
+} = useCategory();
+const {
+  all: { data: subCategories },
+} = useSubCategory();
 
 onMounted(() => {
   getAll();
@@ -48,19 +107,24 @@ function calculateData() {
   expected.value = e;
   totalResult.value = t;
 
+  dataValues.value = [t.yes * 100, t.no * 100];
+  chartDataProps.value = Object.values(result.value);
+
   classProbabilities.value = c;
 }
 
-
-
 const categorySelect = computed(() => {
-  return categories.value?.data?.map((item) => ({label: item.name, value: item.name}))
-})
+  return categories.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.name,
+  }));
+});
 
 const subCategorySelect = computed(() => {
-  return subCategories.value?.data?.filter((value) => value.category.name === formData.value.type)?.map((item) => ({label: item.name, value: item.id}))
-})
-
+  return subCategories.value?.data
+    ?.filter((value) => value.category.name === formData.value.type)
+    ?.map((item) => ({ label: item.name, value: item.name }));
+});
 
 function resetForm() {
   formData.value = initialData();
@@ -123,64 +187,69 @@ function resetForm() {
               </n-button>
             </div>
           </n-form>
-          <div v-else>
+          <div class="space-y-10" v-else>
             <div>
               <n-result
                 v-if="expected == 'Yes'"
                 status="success"
                 title="Yes"
+                class="space-y-10"
                 :description="`Berdasarkan hasil perhitungan Naive Bayes aset disimpulkan worth it untuk dibeli, dengan hasil perhitungan dibawah ini`"
               >
-                <n-table class="mb-10">
-                  <thead>
-                    <tr>
-                      <th colspan="2">Total Data Training</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Yes: {{ classProbabilities.Yes }}</td>
-                      <td>No: {{ classProbabilities.No }}</td>
-                    </tr>
-                    <tr>
-                      <td>Total</td>
-                      <td>
-                        {{ classProbabilities.Yes + classProbabilities.No }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </n-table>
-                <n-table stripped>
-                  <thead>
-                    <tr>
-                      <th>Property</th>
-                      <th>Yes</th>
-                      <th>No</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in Object.keys(result)">
-                      <td>
-                        {{ item }}
-                      </td>
-                      <td>
-                        {{ result[item].yes }}
-                      </td>
-                      <td>
-                        {{ result[item].no }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Total</td>
-                      <td>
-                        {{ totalResult.yes }}
-                      </td>
-                      <td>
-                        {{ totalResult.no }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </n-table>
+                <div class="space-y-10">
+                  <n-table class="mb-10">
+                    <thead>
+                      <tr>
+                        <th colspan="2">Total Data Training</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Yes: {{ classProbabilities.Yes }}</td>
+                        <td>No: {{ classProbabilities.No }}</td>
+                      </tr>
+                      <tr>
+                        <td>Total</td>
+                        <td>
+                          {{ classProbabilities.Yes + classProbabilities.No }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </n-table>
+                  <BarChart v-bind="barChartProps" />
+                  <n-table stripped>
+                    <thead>
+                      <tr>
+                        <th>Property</th>
+                        <th>Yes</th>
+                        <th>No</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in Object.keys(result)">
+                        <td>
+                          {{ item }}
+                        </td>
+                        <td>
+                          {{ result[item].yes }}
+                        </td>
+                        <td>
+                          {{ result[item].no }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Total</td>
+                        <td>
+                          {{ totalResult.yes }}
+                        </td>
+                        <td>
+                          {{ totalResult.no }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </n-table>
+                  <DoughnutChart v-bind="doughnutChartProps" />
+                </div>
               </n-result>
               <n-result
                 v-else
@@ -188,56 +257,60 @@ function resetForm() {
                 title="No"
                 description="Berdasarkan hasil perhitungan Naive Bayes aset disimpulkan tidak worth it untuk dibeli. dengan hasil perhitungan dibawah ini"
               >
-                <n-table class="mb-10">
-                  <thead>
-                    <tr>
-                      <th colspan="2">Total Data Training</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Yes: {{ classProbabilities.Yes }}</td>
-                      <td>No: {{ classProbabilities.No }}</td>
-                    </tr>
-                    <tr>
-                      <td>Total</td>
-                      <td>
-                        {{ classProbabilities.Yes + classProbabilities.No }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </n-table>
-                <n-table stripped>
-                  <thead>
-                    <tr>
-                      <th>Property</th>
-                      <th>Yes</th>
-                      <th>No</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="item in Object.keys(result)">
-                      <td>
-                        {{ item }}
-                      </td>
-                      <td>
-                        {{ result[item].yes }}
-                      </td>
-                      <td>
-                        {{ result[item].no }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Total</td>
-                      <td>
-                        {{ totalResult.yes }}
-                      </td>
-                      <td>
-                        {{ totalResult.no }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </n-table>
+              <div class="space-y-10">
+                  <n-table class="mb-10">
+                    <thead>
+                      <tr>
+                        <th colspan="2">Total Data Training</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Yes: {{ classProbabilities.Yes }}</td>
+                        <td>No: {{ classProbabilities.No }}</td>
+                      </tr>
+                      <tr>
+                        <td>Total</td>
+                        <td>
+                          {{ classProbabilities.Yes + classProbabilities.No }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </n-table>
+                  <BarChart v-bind="barChartProps" />
+                  <n-table stripped>
+                    <thead>
+                      <tr>
+                        <th>Property</th>
+                        <th>Yes</th>
+                        <th>No</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in Object.keys(result)">
+                        <td>
+                          {{ item }}
+                        </td>
+                        <td>
+                          {{ result[item].yes }}
+                        </td>
+                        <td>
+                          {{ result[item].no }}
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Total</td>
+                        <td>
+                          {{ totalResult.yes }}
+                        </td>
+                        <td>
+                          {{ totalResult.no }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </n-table>
+                  <DoughnutChart v-bind="doughnutChartProps" />
+                </div>
               </n-result>
             </div>
             <div class="max-w-sm mx-auto mt-20">
