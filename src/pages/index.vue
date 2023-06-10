@@ -19,6 +19,8 @@ import {
 
 Chart.register(...registerables);
 
+const router = useRouter()
+
 const dataValues = ref([30, 40, 60, 70, 5]);
 const chartDataProps = ref([
   { yes: 0.37, no: 0.34 },
@@ -181,7 +183,7 @@ function resetForm() {
               ></n-select>
             </n-form-item>
             <div class="flex justify-center max-w-full gap-5">
-              <n-button @click="$router.push('/')">Kembali</n-button>
+              <n-button @click="router.push('/')">Kembali</n-button>
               <n-button type="primary" @click="calculateData">
                 Submit
               </n-button>

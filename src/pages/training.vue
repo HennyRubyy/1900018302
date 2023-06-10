@@ -9,6 +9,7 @@ import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
 
+const router = useRouter()
 const showModal = ref(false);
 const showModalEdit = ref(false);
 const showModalDelete = ref(false);
@@ -112,7 +113,7 @@ const subCategorySelect = computed(() => {
     <n-h1> Daftar data training </n-h1>
 
     <div class="flex justify-between mb-5">
-      <n-button @click="$router.push('/')">Kembali</n-button>
+      <n-button @click="router.push('/')">Kembali</n-button>
       <n-button @click="showModal = true"> Tambah </n-button>
     </div>
     <n-table>

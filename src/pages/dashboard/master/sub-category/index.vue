@@ -6,13 +6,15 @@ const {
   delete: { mutate: deleteData, isLoading: isDeleting },
 } = useSubCategory();
 
+const router = useRouter()
+
 function onDelete(id: number) {
   deleteData(id);
 }
 </script>
 <template>
     <n-spin :show="isLoading">
-      <n-button @click="$router.push('sub-category/create')"> Tambah </n-button>
+      <n-button @click="router.push('sub-category/create')"> Tambah </n-button>
       <n-h2> Sub Jenis </n-h2>
       <n-table>
         <thead>
@@ -40,7 +42,7 @@ function onDelete(id: number) {
                 <n-button
                   type="primary"
                   text
-                  @click="$router.push(`sub-category/update/${item.id}`)"
+                  @click="router.push(`sub-category/update/${item.id}`)"
                   >Update</n-button
                 >
                 <n-button

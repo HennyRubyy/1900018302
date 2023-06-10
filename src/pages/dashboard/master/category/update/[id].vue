@@ -8,6 +8,8 @@ const formData = ref({
   id: route.params.id
 });
 
+const router = useRouter()
+
 const {
   update: { mutate, isLoading },
   detail: { data, isLoading: loadingDetail },
@@ -28,7 +30,7 @@ function onSubmit() {
 
 <template>
   <n-spin :show="loadingDetail">
-    <n-button @click="$router.push('category')"> Kembali </n-button>
+    <n-button @click="router.push('category')"> Kembali </n-button>
     <n-h2>
       Update Jenis
     </n-h2>

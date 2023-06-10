@@ -6,6 +6,8 @@ const formData = ref({
     name: ''
 })
 
+const router = useRouter()
+
 const { create: {
 mutate,
 isLoading
@@ -18,7 +20,7 @@ function onSubmit() {
 </script>
 
 <template>
-    <n-button @click="$router.go(-1)"> Kembali </n-button>
+    <n-button @click="router.go(-1)"> Kembali </n-button>
         <n-h2>
         Tambah Jenis
       </n-h2>

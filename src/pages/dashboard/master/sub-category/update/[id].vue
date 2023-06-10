@@ -3,6 +3,7 @@ import { useCategory } from "~/composable/category";
 import { useSubCategory } from "~/composable/sub-category";
 
 const route = useRoute();
+const router = useRouter()
 
 const formData = ref({
   name: "",
@@ -41,7 +42,7 @@ function onSubmit() {
 
 <template>
   <n-spin :show="loadingDetail">
-    <n-button @click="$router.push('category')"> Kembali </n-button>
+    <n-button @click="router.push('category')"> Kembali </n-button>
     <n-h2> Update Jenis </n-h2>
     <n-form @submit.prevent="onSubmit">
       <n-form-item label="Category">

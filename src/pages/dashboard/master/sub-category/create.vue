@@ -7,6 +7,8 @@ const formData = ref<Record<string, string | undefined>>({
   category: undefined,
 });
 
+const router = useRouter()
+
 const {
   all: { data: categories },
 } = useCategory();
@@ -27,7 +29,7 @@ function onSubmit() {
 </script>
 
 <template>
-  <n-button @click="$router.go(-1)"> Kembali </n-button>
+  <n-button @click="router.go(-1)"> Kembali </n-button>
   <n-h2> Tambah Jenis </n-h2>
   <n-form @submit.prevent="onSubmit">
     <n-form-item label="Category">
