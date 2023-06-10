@@ -1,10 +1,10 @@
 import type { DataEntry } from "../types";
 
 //get total data yes dan no global
-function getAllTotal(data: any) {
+function getAllTotal(data: DataEntry[]) {
   return {
-    Yes: data.filter((item:any) => item.result === "Yes").length,
-    No: data.filter((item:any) => item.result === "No").length,
+    Yes: data.filter((item:DataEntry) => item.result === "Yes").length,
+    No: data.filter((item:DataEntry) => item.result === "No").length,
   };
 }
 //menghitung probabilitas setiap properti
@@ -64,7 +64,7 @@ export function calculateProbability(
     },
   };
 
-  const result = { // get hasil hitung sub kategori
+  const result = { // get limit hasil hitung sub kategori
     category: {
       yes: +d.category.Yes.toFixed(2),
       no: +d.category.No.toFixed(2),
@@ -124,7 +124,7 @@ function calculateFeatureProbability(
     }
   });
 
-  console.log(featureProbabilities, feature)
+  
 
   return featureProbabilities;
 }
