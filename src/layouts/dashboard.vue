@@ -14,7 +14,9 @@
         <div
           class="flex justify-center h-15 items-center flex-col text-center p-3"
         >
-          <img class="h-25" :src="Logo" />
+          <router-link to="/">
+            <img class="h-25" :src="Logo" />
+          </router-link>
         </div>
         <n-menu
           v-model:value="activeMenu"
