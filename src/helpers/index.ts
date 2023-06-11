@@ -31,6 +31,7 @@ export function calculateProbability(
     }
   });
 
+  // Probablitas (yes/no) dibagi total data
   const divideTotal = {
     Yes: classProbabilities.Yes / data.length,
     No: classProbabilities.No / data.length
@@ -105,7 +106,7 @@ export function calculateProbability(
 
   // Kembalikan "Ya" jika probabilitasnya lebih besar dari atau sama dengan 0,5, jika tidak, kembalikan "Tidak"
   return {
-    expected: expected.yes > expected.no ? "Yes" : "No",
+    expected: expected.yes >= expected.no ? "Yes" : "No",
     result,
     totalResult: expected,
     classProbabilities,
