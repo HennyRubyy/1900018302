@@ -19,7 +19,7 @@ import {
 
 Chart.register(...registerables);
 
-const router = useRouter()
+const router = useRouter();
 
 const dataValues = ref([30, 40, 60, 70, 5]);
 const chartDataProps = ref([
@@ -72,11 +72,15 @@ const { barChartProps } = useBarChart({
 });
 
 const formData = ref(initialData());
-const expected = ref<"Yes" | "No">("Yes");
+const expected = ref<string>("Yes");
 const result = ref();
 const totalResult = ref();
 const classProbabilities = ref();
 const isHasResult = ref(false);
+const divideTotal = ref({
+  Yes: 0,
+  No: 0,
+});
 
 const { getAll, trainings } = useTraining();
 const {
@@ -96,6 +100,7 @@ function calculateData() {
     result: r,
     totalResult: t,
     classProbabilities: c,
+    divideTotal: d,
   } = calculateProbability(
     trainings.value,
     formData.value.type as string,
@@ -104,9 +109,10 @@ function calculateData() {
     formData.value.classification as string,
     formData.value.condition as string
   );
+  divideTotal.value = d;
   isHasResult.value = true;
   result.value = r;
-  expected.value = e;
+  expected.value = e as string;
   totalResult.value = t;
 
   dataValues.value = [t.yes * 100, t.no * 100];
@@ -228,6 +234,15 @@ function resetForm() {
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>Probablilitas</td>
+                        <td>
+                          {{ divideTotal.Yes }}
+                        </td>
+                        <td>
+                          {{ divideTotal.No }}
+                        </td>
+                      </tr>
                       <tr v-for="item in Object.keys(result)">
                         <td>
                           {{ item }}
@@ -259,7 +274,7 @@ function resetForm() {
                 title="No"
                 description="Berdasarkan hasil perhitungan Naive Bayes aset disimpulkan tidak worth it untuk dibeli. dengan hasil perhitungan dibawah ini"
               >
-              <div class="space-y-10">
+                <div class="space-y-10">
                   <n-table class="mb-10">
                     <thead>
                       <tr>
@@ -289,6 +304,15 @@ function resetForm() {
                       </tr>
                     </thead>
                     <tbody>
+                      <tr>
+                        <td>Probablilitas</td>
+                        <td>
+                          {{ divideTotal.Yes.toFixed(2) }}
+                        </td>
+                        <td>
+                          {{ divideTotal.No.toFixed(2) }}
+                        </td>
+                      </tr>
                       <tr v-for="item in Object.keys(result)">
                         <td>
                           {{ item }}

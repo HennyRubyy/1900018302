@@ -15,7 +15,7 @@ export function calculateProbability(
   price: string,
   classifications: string,
   conditions: string
-): any {
+) {
   // Hitung probabilitas masing-masing kelas ("Ya" dan "Tidak")
   const classProbabilities = {
     Yes: 0,
@@ -30,6 +30,11 @@ export function calculateProbability(
       classProbabilities.No++;
     }
   });
+
+  const divideTotal = {
+    Yes: classProbabilities.Yes / data.length,
+    No: classProbabilities.No / data.length
+  }
 
   // Hitung probabilitas fitur input yang diberikan setiap kelas dari user
   const featureProbabilities = { 
@@ -66,24 +71,24 @@ export function calculateProbability(
 
   const result = { // get limit hasil hitung sub kategori
     category: {
-      yes: +d.category.Yes.toFixed(2),
-      no: +d.category.No.toFixed(2),
+      yes: +d.category.Yes,
+      no: +d.category.No,
     },
     subCategory: {
-      yes: +d.subCategory.Yes.toFixed(2),
-      no: +d.subCategory.No.toFixed(2),
+      yes: +d.subCategory.Yes,
+      no: +d.subCategory.No,
     },
     price: {
-      yes: +d.price.Yes.toFixed(2),
-      no: +d.price.No.toFixed(2),
+      yes: +d.price.Yes,
+      no: +d.price.No,
     },
     classifications: {
-      yes: +d.classifications.Yes.toFixed(2),
-      no: +d.classifications.No.toFixed(2),
+      yes: +d.classifications.Yes,
+      no: +d.classifications.No,
     },
     conditions: {
-      yes: +d.conditions.Yes.toFixed(2),
-      no: +d.conditions.No.toFixed(2),
+      yes: +d.conditions.Yes,
+      no: +d.conditions.No,
     },
   };
 
@@ -95,12 +100,16 @@ export function calculateProbability(
     };
   });
 
+  expected.yes *= divideTotal.Yes
+  expected.no *= divideTotal.No
+
   // Kembalikan "Ya" jika probabilitasnya lebih besar dari atau sama dengan 0,5, jika tidak, kembalikan "Tidak"
   return {
     expected: expected.yes > expected.no ? "Yes" : "No",
     result,
     totalResult: expected,
     classProbabilities,
+    divideTotal
   };
 }
 
