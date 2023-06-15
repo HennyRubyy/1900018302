@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { calculateProbability } from "../helpers";
 import {
-  classificationSelect,
-  conditionSelect,
-  priceSelect,
   initialData,
 } from "../source";
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
+import { useClassification } from "../composable/classification";
+import { usePrice } from "../composable/price";
+import { useCondition } from "../composable/condition";
 import { Chart, registerables, type ChartData, ChartOptions } from "chart.js";
 import {
   DoughnutChart,
@@ -31,7 +31,7 @@ const chartDataProps = ref([
 ]);
 const dataLabels = ref(["Yes", "No"]);
 
-const testData = computed<ChartData<"doughnut">>(() => ({
+const chartDataValue = computed<ChartData<"doughnut">>(() => ({
   labels: dataLabels.value,
   datasets: [
     {
@@ -44,7 +44,7 @@ const testData = computed<ChartData<"doughnut">>(() => ({
 const options = computed<ChartOptions<"doughnut">>(() => ({}));
 
 const { doughnutChartProps } = useDoughnutChart({
-  chartData: testData,
+  chartData: chartDataValue,
   options,
 });
 
@@ -89,6 +89,15 @@ const {
 const {
   all: { data: subCategories },
 } = useSubCategory();
+const {
+  all: { data: prices },
+} = usePrice();
+const {
+  all: { data: conditions },
+} = useCondition();
+const {
+  all: { data: classifications },
+} = useClassification();
 
 onMounted(() => {
   getAll();
@@ -123,6 +132,27 @@ function calculateData() {
 
 const categorySelect = computed(() => {
   return categories.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.name,
+  }));
+});
+
+const classificationSelect = computed(() => {
+  return classifications.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.name,
+  }));
+});
+
+const priceSelect = computed(() => {
+  return prices.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.name,
+  }));
+});
+
+const conditionSelect = computed(() => {
+  return conditions.value?.data?.map((item) => ({
     label: item.name,
     value: item.name,
   }));

@@ -65,6 +65,18 @@ const menuOptions: MenuOption[] = [
         label: "Sub Category",
         key: "/dashboard/master/sub-category",
       },
+      {
+        label: "Price",
+        key: "/dashboard/master/prices",
+      },
+      {
+        label: "Classifications",
+        key: "/dashboard/master/classification",
+      },
+      {
+        label: "Condition",
+        key: "/dashboard/master/condition",
+      },
     ],
   },
 ];
