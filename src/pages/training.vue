@@ -31,7 +31,9 @@ const {
   all: { data: classifications },
 } = useClassification();
 
-const { getAll, trainings, createOne, deleteOne, updateOne } = useTraining();
+const { getAll, trainings: t, createOne, deleteOne, updateOne } = useTraining();
+
+const trainings: any = computed(() => t.value)
 
 onMounted(() => {
   getAll();
