@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {
-  classificationSelect,
-  conditionSelect,
-  priceSelect,
   initialData,
 } from "../source";
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
+import { useClassification } from "../composable/classification";
+import { usePrice } from "../composable/price";
+import { useCondition } from "../composable/condition";
 
 const router = useRouter()
 const showModal = ref(false);
@@ -21,6 +21,15 @@ const {
 const {
   all: { data: subCategories },
 } = useSubCategory();
+const {
+  all: { data: prices },
+} = usePrice();
+const {
+  all: { data: conditions },
+} = useCondition();
+const {
+  all: { data: classifications },
+} = useClassification();
 
 const { getAll, trainings, createOne, deleteOne, updateOne } = useTraining();
 
@@ -70,12 +79,12 @@ function onEdit({
   id,
 }: any) {
   selectedId.value = id;
-  formData.value.type = category;
-  formData.value.subType = sub_category;
-  formData.value.price = price;
-  formData.value.classification = classification;
-  formData.value.condition = condition;
-  formData.value.result = result;
+  formData.value.type = category.id;
+  formData.value.subType = sub_category.id;
+  formData.value.price = price.id;
+  formData.value.classification = classification.id;
+  formData.value.condition = condition.id;
+  formData.value.result = result.id;
 
   showModalEdit.value = true;
 }
@@ -97,14 +106,36 @@ function onSubmitEdit() {
 const categorySelect = computed(() => {
   return categories.value?.data?.map((item) => ({
     label: item.name,
-    value: item.name,
+    value: item.id,
   }));
 });
 
+const classificationSelect = computed(() => {
+  return classifications.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+});
+
+const priceSelect = computed(() => {
+  return prices.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+});
+
+const conditionSelect = computed(() => {
+  return conditions.value?.data?.map((item) => ({
+    label: item.name,
+    value: item.id,
+  }));
+});
+
+
 const subCategorySelect = computed(() => {
   return subCategories.value?.data
-    ?.filter((value) => value.category.name === formData.value.type)
-    ?.map((item) => ({ label: item.name, value: item.name }));
+    ?.filter((value) => value.category.id === formData.value.type)
+    ?.map((item) => ({ label: item.name, value: item.id }));
 });
 </script>
 
@@ -138,19 +169,19 @@ const subCategorySelect = computed(() => {
             {{ index + 1 }}
           </td>
           <td>
-            {{ item.category }}
+            {{ item.category.name }}
           </td>
           <td>
-            {{ item.sub_category }}
+            {{ item.sub_category.name }}
           </td>
           <td>
-            {{ item.price }}
+            {{ item.price.name }}
           </td>
           <td>
-            {{ item.classification }}
+            {{ item.classification.name }}
           </td>
           <td>
-            {{ item.condition }}
+            {{ item.condition.name }}
           </td>
           <td>
             {{ item.result }}

@@ -15,7 +15,7 @@ function onDelete(id: number) {
 <template>
     <n-spin :show="isLoading">
       <n-button @click="router.push('classification/create')"> Tambah </n-button>
-      <n-h2> Jenis </n-h2>
+      <n-h2> Klasifikasi </n-h2>
       <n-table>
         <thead>
           <tr>

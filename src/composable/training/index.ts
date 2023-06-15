@@ -17,7 +17,7 @@ export function useTraining() {
     try {
       const { data: todos, error } = await supabase
         .from("trainings")
-        .select("*")
+        .select("*, category(*), sub_category(*), price(*), classification(*), condition(*)")
         .order("id");
 
       if (error) {

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { calculateProbability } from "../helpers";
-import {
-  initialData,
-} from "../source";
+import { initialData } from "../source";
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
@@ -111,7 +109,16 @@ function calculateData() {
     classProbabilities: c,
     divideTotal: d,
   } = calculateProbability(
-    trainings.value,
+    trainings.value.map((item) => {
+      return {
+        category: item.category.name,
+        sub_category: item.sub_category.name,
+        price: item.price.name,
+        classification: item.classification.name,
+        condition: item.condition.name,
+        result: item.result,
+      };
+    }),
     formData.value.type as string,
     formData.value.subType as string,
     formData.value.price as string,

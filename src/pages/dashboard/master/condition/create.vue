@@ -22,7 +22,7 @@ function onSubmit() {
 <template>
     <n-button @click="router.go(-1)"> Kembali </n-button>
         <n-h2>
-        Tambah Jenis
+        Tambah Kondisi
       </n-h2>
         <n-form @submit.prevent="onSubmit">
             <n-form-item label="Nama">

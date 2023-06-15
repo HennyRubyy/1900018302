@@ -32,7 +32,7 @@ function onSubmit() {
   <n-spin :show="loadingDetail">
     <n-button @click="router.push('category')"> Kembali </n-button>
     <n-h2>
-      Update Jenis
+      Update Kondisi
     </n-h2>
     <n-form @submit.prevent="onSubmit">
       <n-form-item label="Nama">
