@@ -2,10 +2,18 @@ import { supabase } from "../../lib/supabase";
 
 type Training = {
   id: number;
-  category: string;
-  sub_category: string;
-  classification: string;
-  condition: string;
+  category: {
+    name: string;
+  };
+  sub_category: {
+    name: string;
+  };
+  classification: {
+    name: string;
+  };
+  condition: {
+    name: string;
+  };
   price: string;
   result: "Yes" | "No";
 };
@@ -17,7 +25,9 @@ export function useTraining() {
     try {
       const { data: todos, error } = await supabase
         .from("trainings")
-        .select("*, category(*), sub_category(*), price(*), classification(*), condition(*)")
+        .select(
+          "*, category(*), sub_category(*), price(*), classification(*), condition(*)"
+        )
         .order("id");
 
       if (error) {
