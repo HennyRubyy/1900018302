@@ -108,8 +108,8 @@ function calculateData() {
     totalResult: t,
     classProbabilities: c,
     divideTotal: d,
-  } = calculateProbability(
-    trainings.value.map((item) => {
+  } = calculateProbability (
+    trainings.value.map((item: any) => {
       return {
         category: item.category.name,
         sub_category: item.sub_category.name,
