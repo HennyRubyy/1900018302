@@ -3,15 +3,19 @@ import { supabase } from "../../lib/supabase";
 type Training = {
   id: number;
   category: {
+    id: number;
     name: string;
   };
   sub_category: {
+    id: number;
     name: string;
   };
   classification: {
+    id: number;
     name: string;
   };
   condition: {
+    id: number;
     name: string;
   };
   price: string;
