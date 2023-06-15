@@ -164,7 +164,7 @@ const subCategorySelect = computed(() => {
         </td>
       </tr>
       <template v-else>
-        <tr v-for="(item: any, index) in trainings">
+        <tr v-for="(item, index) in trainings">
           <td>
             {{ index + 1 }}
           </td>
