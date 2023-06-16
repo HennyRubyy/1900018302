@@ -131,8 +131,8 @@ function calculateData() {
   expected.value = e as string;
   totalResult.value = t;
 
-  const yesPercentage = (t.yes / t.yes + t.no) * 100;
-  const noPercentage = (t.no / t.yes + t.no) * 100;
+  const yesPercentage = t.yes;
+  const noPercentage = t.no;
 
   dataValues.value = [yesPercentage, noPercentage];
   chartDataProps.value = Object.values(result.value);
