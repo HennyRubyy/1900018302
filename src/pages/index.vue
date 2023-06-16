@@ -39,7 +39,17 @@ const chartDataValue = computed<ChartData<"doughnut">>(() => ({
   ],
 }));
 
-const options = computed<ChartOptions<"doughnut">>(() => ({}));
+const options = computed<ChartOptions<"doughnut">>(() => ({
+  plugins: {
+    tooltip: {
+      callbacks:{
+        label(value) {
+            return [value.formattedValue, '%'].join(' ')
+        },
+      }
+    },
+  },
+}));
 
 const { doughnutChartProps } = useDoughnutChart({
   chartData: chartDataValue,
