@@ -108,7 +108,7 @@ function calculateData() {
     totalResult: t,
     classProbabilities: c,
     divideTotal: d,
-  } = calculateProbability (
+  } = calculateProbability(
     trainings.value.map((item: any) => {
       return {
         category: item.category.name,
@@ -131,7 +131,10 @@ function calculateData() {
   expected.value = e as string;
   totalResult.value = t;
 
-  dataValues.value = [t.yes * 100, t.no * 100];
+  const yesPercentage = (t.yes / t.yes + t.no) * 100;
+  const noPercentage = (t.no / t.yes + t.no) * 100;
+
+  dataValues.value = [yesPercentage, noPercentage];
   chartDataProps.value = Object.values(result.value);
 
   classProbabilities.value = c;
