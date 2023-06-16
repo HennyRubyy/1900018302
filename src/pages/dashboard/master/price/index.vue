@@ -14,7 +14,7 @@ function onDelete(id: number) {
 </script>
 <template>
     <n-spin :show="isLoading">
-      <n-button @click="router.push('prices/create')"> Tambah </n-button>
+      <n-button @click="router.push('price/create')"> Tambah </n-button>
       <n-h2> Harga </n-h2>
       <n-table>
         <thead>
@@ -38,7 +38,7 @@ function onDelete(id: number) {
                 <n-button
                   type="primary"
                   text
-                  @click="router.push(`prices/update/${item.id}`)"
+                  @click="router.push(`price/update/${item.id}`)"
                   >Update</n-button
                 >
                 <n-button
