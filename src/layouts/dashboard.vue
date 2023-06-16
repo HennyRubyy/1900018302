@@ -67,7 +67,7 @@ const menuOptions: MenuOption[] = [
       },
       {
         label: "Price",
-        key: "/dashboard/master/prices",
+        key: "/dashboard/master/price",
       },
       {
         label: "Classifications",
