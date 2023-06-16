@@ -30,7 +30,7 @@ function onSubmit() {
 
 <template>
   <n-spin :show="loadingDetail">
-    <n-button @click="router.push('classification')"> Kembali </n-button>
+    <n-button @click="router.go(-1)"> Kembali </n-button>
     <n-h2>
       Update Klasifikasi
     </n-h2>
