@@ -105,7 +105,7 @@ const resultSelect = [
 ];
 
 async function onSubmit() {
-  formRef.value?.validate((errors) => {
+  formRef.value?.validate((errors: any) => {
     if (!errors) {
       createOne(
         formData.value.type as string,
