@@ -114,10 +114,10 @@ async function onSubmit() {
         formData.value.classification as string,
         formData.value.condition as string,
         formData.value.result as string
-      );
+        );
+        showModal.value = false;
     } else {
       message.error("Invalid");
-      showModal.value = false;
     }
   });
 
