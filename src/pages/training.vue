@@ -117,10 +117,10 @@ async function onSubmit() {
       );
     } else {
       message.error("Invalid");
+      showModal.value = false;
     }
   });
 
-  showModal.value = false;
 }
 
 function onEdit({
