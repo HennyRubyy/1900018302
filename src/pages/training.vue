@@ -81,12 +81,12 @@ function onEdit({
   id,
 }: any) {
   selectedId.value = id;
-  formData.value.type = category.id;
-  formData.value.subType = sub_category.id;
-  formData.value.price = price.id;
-  formData.value.classification = classification.id;
-  formData.value.condition = condition.id;
-  formData.value.result = result.id;
+  formData.value.type = category?.id;
+  formData.value.subType = sub_category?.id;
+  formData.value.price = price?.id;
+  formData.value.classification = classification?.id;
+  formData.value.condition = condition?.id;
+  formData.value.result = result?.id;
 
   showModalEdit.value = true;
 }
