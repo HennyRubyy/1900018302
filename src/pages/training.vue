@@ -171,22 +171,22 @@ const subCategorySelect = computed(() => {
             {{ index + 1 }}
           </td>
           <td>
-            {{ item.category.name }}
+            {{ item?.category?.name }}
           </td>
           <td>
-            {{ item.sub_category.name }}
+            {{ item?.sub_category?.name }}
           </td>
           <td>
-            {{ item.price.name }}
+            {{ item?.price?.name }}
           </td>
           <td>
-            {{ item.classification.name }}
+            {{ item?.classification?.name }}
           </td>
           <td>
-            {{ item.condition.name }}
+            {{ item?.condition?.name }}
           </td>
           <td>
-            {{ item.result }}
+            {{ item?.result }}
           </td>
           <td class="space-x-2">
             <n-button text type="primary" @click="onEdit(item)">
