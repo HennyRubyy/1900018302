@@ -1,19 +1,20 @@
 <script setup lang="ts">
-import {
-  initialData,
-} from "../source";
+import { initialData } from "../source";
 import { useTraining } from "../composable/training";
 import { useCategory } from "../composable/category";
 import { useSubCategory } from "../composable/sub-category";
 import { useClassification } from "../composable/classification";
 import { usePrice } from "../composable/price";
 import { useCondition } from "../composable/condition";
+import { useMessage } from "naive-ui";
 
-const router = useRouter()
+const router = useRouter();
 const showModal = ref(false);
 const showModalEdit = ref(false);
 const showModalDelete = ref(false);
 const selectedId = ref();
+const formRef = ref<any>();
+const message = useMessage();
 
 const {
   all: { data: categories },
@@ -33,7 +34,52 @@ const {
 
 const { getAll, trainings: t, createOne, deleteOne, updateOne } = useTraining();
 
-const trainings: any = computed(() => t.value)
+const formRules = {
+  type: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+  subType: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+  price: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+  classification: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+  condition: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+  result: [
+    {
+      required: true,
+      trigger: ["input"],
+      message: "Wajib diisi",
+    },
+  ],
+};
+
+const trainings: any = computed(() => t.value);
 
 onMounted(() => {
   getAll();
@@ -59,14 +105,20 @@ const resultSelect = [
 ];
 
 async function onSubmit() {
-  createOne(
-    formData.value.type as string,
-    formData.value.subType as string,
-    formData.value.price as string,
-    formData.value.classification as string,
-    formData.value.condition as string,
-    formData.value.result as string
-  );
+  formRef.value?.validate((errors) => {
+    if (!errors) {
+      createOne(
+        formData.value.type as string,
+        formData.value.subType as string,
+        formData.value.price as string,
+        formData.value.classification as string,
+        formData.value.condition as string,
+        formData.value.result as string
+      );
+    } else {
+      message.error("Invalid");
+    }
+  });
 
   showModal.value = false;
 }
@@ -132,7 +184,6 @@ const conditionSelect = computed(() => {
     value: item.id,
   }));
 });
-
 
 const subCategorySelect = computed(() => {
   return subCategories.value?.data
@@ -209,15 +260,15 @@ const subCategorySelect = computed(() => {
   </div>
   <n-modal style="max-width: 80vw" v-model:show="showModal" preset="card">
     <n-h2> Tambah Data </n-h2>
-    <n-form>
-      <n-form-item label="Jenis">
+    <n-form ref="formRef" :rules="formRules" :model="formData">
+      <n-form-item label="Jenis" path="type">
         <n-select
           v-model:value="formData.type"
           :options="categorySelect"
           filterable
         />
       </n-form-item>
-      <n-form-item label="Jenis Kategori">
+      <n-form-item label="Jenis Kategori" path="subType">
         <n-select
           v-model:value="formData.subType"
           :disabled="!formData.type"
@@ -225,28 +276,28 @@ const subCategorySelect = computed(() => {
           filterable
         />
       </n-form-item>
-      <n-form-item label="Harga">
+      <n-form-item label="Harga" path="price">
         <n-select
           v-model:value="formData.price"
           :options="priceSelect"
           filterable
         ></n-select>
       </n-form-item>
-      <n-form-item label="Kebutuhan">
+      <n-form-item label="Kebutuhan" path="classification">
         <n-select
           v-model:value="formData.classification"
           :options="classificationSelect"
           filterable
         ></n-select>
       </n-form-item>
-      <n-form-item label="Kondisi">
+      <n-form-item label="Kondisi" path="condition">
         <n-select
           v-model:value="formData.condition"
           :options="conditionSelect"
           filterable
         ></n-select>
       </n-form-item>
-      <n-form-item label="Result">
+      <n-form-item label="Result" path="result">
         <n-select
           v-model:value="formData.result"
           :options="resultSelect"
